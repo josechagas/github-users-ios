@@ -25,7 +25,7 @@ class ListUsersViewModel: ListUsersViewModelProtocol {
         _executionStatus = .inProgress
         do {
             _users = try await viewUsersUseCase.loadUsers()
-            _executionStatus = .success
+            _executionStatus = (_users?.isEmpty ?? true) ? .noData : .success
         } catch {
             _executionStatus = .failed(error: error)
         }
@@ -36,7 +36,7 @@ class ListUsersViewModel: ListUsersViewModelProtocol {
     }
     
     func userAtIndex(_ index: Int) -> SmallUserInfo? {
-        guard let users = _users, users.count > index else {
+        guard let users = _users, users.count > index, index >= 0 else {
             return nil
         }
         return users[index]
