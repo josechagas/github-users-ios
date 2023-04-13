@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+@MainActor
+class ListUsersViewModelFactory {
+    class func make() -> any ListUsersViewModelProtocol {
+        let useCase = ViewUsersUseCaseFactory.make()
+        return ListUsersViewModel(viewUsersUseCase: useCase)
+    }
+}

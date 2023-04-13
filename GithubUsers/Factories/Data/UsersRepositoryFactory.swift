@@ -7,6 +7,8 @@
 
 import Foundation
 
-class ViewUsersRepositoryFactory {
-    class func make()-> ViewUsers
+class UsersRepositoryFactory {
+    class func make()-> UsersRepositoryProtocol {
+        return UsersRepository(usersService: UsersApiService())
+    }
 }

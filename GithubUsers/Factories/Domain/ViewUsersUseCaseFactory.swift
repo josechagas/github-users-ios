@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+class ViewUsersUseCaseFactory {
+    class func make() -> ViewUsersUseCaseProtocol {
+        let usersRepository = UsersRepositoryFactory.make()
+        return ViewUsersUseCase(usersRepository: usersRepository)
+    }
+}
