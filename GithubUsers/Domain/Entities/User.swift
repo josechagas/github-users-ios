@@ -6,3 +6,18 @@
 //
 
 import Foundation
+
+struct User {
+    var id: Int
+    var login: String
+    var name: String
+    var company: String?
+    var email: String?
+    var bio: String?
+    var numberOfPublicRepos: Int
+    var numberOfPublicGists: Int
+    var followers: Int
+    var following: Int
+    var avatarUrl: String?
+    var htmlUrl: String
+}

@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+class ViewUsersUseCase: ViewUsersUseCaseProtocol {
+    
+    private let usersRepository: UsersRepositoryProtocol
+    
+    init(usersRepository: UsersRepositoryProtocol) {
+        self.usersRepository = usersRepository
+    }
+    
+    func loadUsers() async throws -> [SmallUserInfo] {
+        return try await usersRepository.loadUsers()
+    }
+}

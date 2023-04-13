@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+
+protocol ViewUsersUseCaseProtocol {
+    func loadUsers() async throws -> [SmallUserInfo]
+}
