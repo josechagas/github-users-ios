@@ -6,3 +6,25 @@
 //
 
 import Foundation
+
+struct UsersRepository: UsersRepositoryProtocol {
+    
+    private let usersService: UsersApiServiceProtocol
+        
+    init(usersService: UsersApiServiceProtocol) {
+        self.usersService = usersService
+    }
+    
+    func loadUsers() async throws -> [SmallUserInfo] {
+        let result = try await usersService.loadUsers()
+        return result.map({
+            SmallUserInfo(response: $0)
+        })
+    }
+}
+
+fileprivate extension SmallUserInfo {
+    init(response: LoadUsersResponse) {
+        self.init(id: response.id, login: response.login, htmlUrl: response.htmlUrl)
+    }
+}

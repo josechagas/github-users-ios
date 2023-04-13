@@ -7,9 +7,28 @@
 
 import Foundation
 
-
 struct LoadUsersResponse: Codable {
+    var login: String
+    var id: Int
+    var nodeId: String
+    var avatarUrl: String?
+    var gravatarId: String?
+    var url: String
+    var htmlUrl: String
+    var type: String
+    var siteAdmin: Bool
     
+    enum CodingKeys:String, CodingKey {
+        case login
+        case id
+        case nodeId = "node_id"
+        case avatarUrl = "avatar_url"
+        case gravatarId = "gravatar_id"
+        case url
+        case htmlUrl = "html_url"
+        case type
+        case siteAdmin = "site_admin"
+    }
 }
 
 /*
