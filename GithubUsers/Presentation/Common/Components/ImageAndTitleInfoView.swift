@@ -6,13 +6,17 @@
 //
 
 import UIKit
+import SDWebImage
 
 class ImageAndTitleInfoView: UIView, WithViewCode {
     
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.lightGray
+        view.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+        view.contentMode = .scaleAspectFill
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
         return view
     }()
     
@@ -53,8 +57,8 @@ class ImageAndTitleInfoView: UIView, WithViewCode {
             imageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 10),
             imageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 10),
             imageView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            imageView.widthAnchor.constraint(equalToConstant: 50),
-            imageView.heightAnchor.constraint(equalToConstant: 50)
+            imageView.widthAnchor.constraint(equalToConstant: 60),
+            imageView.heightAnchor.constraint(equalToConstant: 60)
         ])
     }
     
@@ -69,6 +73,9 @@ class ImageAndTitleInfoView: UIView, WithViewCode {
     
     func setUpWith(model: ImageAndTitleInfoView.Model) {
         titleLabel.text = model.title
+        if let imageUrl = model.image {
+            imageView.sd_setImage(with: URL(string: imageUrl), placeholderImage: nil)
+        }
     }
 }
 

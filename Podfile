@@ -6,6 +6,7 @@ target 'GithubUsers' do
   use_frameworks!
 
   # Pods for GithubUsers
+  pod 'SDWebImage', '~> 5.0'
   
   target 'GithubUsersTests' do
     inherit! :search_paths
