@@ -25,6 +25,6 @@ struct UsersRepository: UsersRepositoryProtocol {
 
 fileprivate extension SmallUserInfo {
     init(response: LoadUsersResponse) {
-        self.init(id: response.id, login: response.login, htmlUrl: response.htmlUrl)
+        self.init(id: response.id, login: response.login, avatarUrl: response.avatarUrl, htmlUrl: response.htmlUrl)
     }
 }
