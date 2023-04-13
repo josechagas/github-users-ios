@@ -6,3 +6,14 @@
 //
 
 import Foundation
+
+@MainActor
+protocol ListUsersViewModelProtocol {
+    var users: Published<[SmallUserInfo]?>.Publisher {get}
+    var executionStatus: Published<ExecutionStatus>.Publisher {get}
+    
+    func loadUsers() async
+    
+    func numberOfUsers()-> Int
+    func userAtIndex(_ index: Int) -> SmallUserInfo?
+}

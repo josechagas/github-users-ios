@@ -6,24 +6,104 @@
 //
 
 import UIKit
+import Combine
 
 class ListUsersVC: UIViewController {
 
+    private let viewModel: any ListUsersViewModelProtocol
+    private var cancellables: Set<AnyCancellable> = []
+
+    init(viewModel: any ListUsersViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    private lazy var contentView: ListUsersView = {
+        return ListUsersView()
+    }()
+        
+    override func loadView() {
+        view = contentView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setUpUI()
+        setUpObservers()
         // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadUsers()
     }
-    */
+    
+    private func setUpUI() {
+        title = "Users"
+        contentView.setUpWith(datasource: self, delegate: self, loadStatusViewDelegate: self)
+    }
+    
+    private func setUpObservers() {
+        viewModel.users.receive(on: RunLoop.main)
+            .sink { [weak self] (_) in
+                self?.contentView.reloadData()
+            }.store(in: &cancellables)
+        
+        viewModel.executionStatus.receive(on: RunLoop.main)
+            .sink { [weak self] (status) in
+                self?.contentView.updateForStatus(executionStatus: status)
+            }.store(in: &cancellables)
+    }
+    
+    private func loadUsers() {
+        Task(priority: .userInitiated) {
+            await viewModel.loadUsers()
+        }
+    }
+}
 
+//MARK: - UITableViewDataSource
+
+extension ListUsersVC: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.numberOfUsers()
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let user = viewModel.userAtIndex(indexPath.row),
+              let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: ImageAndTitleInfoTableViewCell.self), for: indexPath) as? ImageAndTitleInfoTableViewCell else {
+            return UITableViewCell()
+        }
+        cell.setUpWith(model: ImageAndTitleInfoView.Model(
+            image: user.avatarUrl, title: user.login
+        ))
+        return cell
+    }
+}
+
+extension ListUsersVC: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+
+//MARK: - LoadStatusViewDelegate
+
+extension ListUsersVC: LoadResultStatusViewDelegate {
+    func onActionButtonPressed(currentStatus: LoadResultStatusView.Status) {
+        switch(currentStatus) {
+        case .noData:
+            loadUsers()
+        case .failed:
+            loadUsers()
+        default:
+            break
+        }
+    }
 }

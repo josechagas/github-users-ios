@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+enum ExecutionStatus {
+    case none
+    case inProgress
+    case success
+    case noData
+    case failed(error: Error)
+}
