@@ -89,6 +89,10 @@ extension ListUsersVC: UITableViewDataSource {
 extension ListUsersVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        if let user = viewModel.userAtIndex(indexPath.row) {
+            let userDetailsVC = UserDetailsVCFactory.make(userLogin: user.login)
+            show(userDetailsVC, sender: self)
+        }
     }
 }
 
