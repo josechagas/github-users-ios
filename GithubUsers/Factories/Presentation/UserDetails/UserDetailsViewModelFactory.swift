@@ -11,6 +11,7 @@ import Foundation
 @MainActor
 class UserDetailsViewModelFactory {
     class func make(userLogin: String) -> any UserDetailsViewModelProtocol  {
-        return UserDetailsViewModel(userLogin: userLogin)
+        let useCase = UserDetailsUseCaseFactory.make()
+        return UserDetailsViewModel(userLogin: userLogin, userDetailsUseCase: useCase)
     }
 }
