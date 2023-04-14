@@ -74,7 +74,7 @@ class LoadResultStatusView: UIStackView, WithViewCode {
     func addSubviews() {
         axis = .vertical
         alignment = .fill
-        distribution = .fillProportionally
+        distribution = .fill
         spacing = 10
         addArrangedSubview(titleLabel)
         addArrangedSubview(detailLabel)
