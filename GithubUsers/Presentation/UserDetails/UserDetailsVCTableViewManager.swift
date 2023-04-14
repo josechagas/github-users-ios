@@ -7,22 +7,33 @@
 
 import UIKit
 
-class UserDetailsVCTableViewManager: NSObject, UITableViewDataSource {
+@MainActor
+class UserDetailsVCTableViewManager: NSObject {
         
-    var viewModel: ()-> (any UserDetailsViewModelProtocol)?
+    private var viewModel: ()-> (any UserDetailsViewModelProtocol)?
+    private var showRepositoriesAction: ()-> Void
+
+    private var numberOfSections: Int = 3
+    private var showRepositoresCellIndexPath = IndexPath(row: 0, section: 2)
+    
     private var hasData: Bool {
         viewModel()?.user != nil
     }
     
-    init(viewModel: @escaping ()-> (any UserDetailsViewModelProtocol)?) {
+    init(viewModel: @escaping ()-> (any UserDetailsViewModelProtocol)?, showRepositoriesAction: @escaping ()-> Void) {
         self.viewModel = viewModel
+        self.showRepositoriesAction = showRepositoriesAction
     }
-    
+}
+
+//MARK: - UITableViewDataSource
+
+extension UserDetailsVCTableViewManager: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         guard hasData else {
             return 0
         }
-        return 2
+        return numberOfSections
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -34,21 +45,28 @@ class UserDetailsVCTableViewManager: NSObject, UITableViewDataSource {
             return 1
         } else if section == 1 {
             return 4
+        } else if section == 2 {
+            return 1
         }
         
         return 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let user = viewModel()?.user, indexPath.section <= 1 else {
+        guard let user = viewModel()?.user, indexPath.section <= numberOfSections - 1 else {
             return UITableViewCell()
         }
         
         if indexPath == IndexPath(row: 0,section: 0) {
             return dequeueProfileHeaderCell(tableView: tableView, indexPath: indexPath, user: user)
+            
         } else if indexPath.section == 1 {
             let (title, value) = titleValueForCell(row: indexPath.row, user: user)
             return dequeueValueCell(tableView: tableView, indexPath: indexPath, title: title, value: value)
+            
+        } else if indexPath == showRepositoresCellIndexPath {
+            return dequeueButtonActionCell(tableView: tableView, indexPath: indexPath, actionTitle: "Repositories")
+
         }
         
         return UITableViewCell()
@@ -79,7 +97,20 @@ class UserDetailsVCTableViewManager: NSObject, UITableViewDataSource {
         content.text = title
         content.secondaryText = value
         cell.contentConfiguration = content
-
+        cell.selectionStyle = .none
+        
+        return cell
+    }
+    
+    private func dequeueButtonActionCell(tableView: UITableView, indexPath: IndexPath, actionTitle: String) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: UITableViewCell.self), for: indexPath)
+        
+        var content = UIListContentConfiguration.cell()
+        content.text = actionTitle
+        content.textProperties.alignment = .center
+        content.textProperties.color = UIColor.link
+        cell.contentConfiguration = content
+        
         return cell
     }
     
@@ -95,6 +126,17 @@ class UserDetailsVCTableViewManager: NSObject, UITableViewDataSource {
             return ("Following", "\(user.following)")
         default:
             return ("", nil)
+        }
+    }
+}
+
+//MARK: - UITableViewDelegate
+
+extension UserDetailsVCTableViewManager: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath == showRepositoresCellIndexPath {
+            showRepositoriesAction()
         }
     }
 }

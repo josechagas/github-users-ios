@@ -15,6 +15,8 @@ class UserDetailsVC: UIViewController {
     private lazy var tableViewManager: UserDetailsVCTableViewManager = {
         UserDetailsVCTableViewManager { [weak self] in
             self?.viewModel
+        } showRepositoriesAction: { [weak self] in
+            self?.showRepositories()
         }
     }()
 
@@ -49,7 +51,7 @@ class UserDetailsVC: UIViewController {
     
     private func setUpUI() {
         title = viewModel.userLogin
-        contentView.setUpWith(datasource: tableViewManager, delegate: nil, loadStatusViewDelegate: self)
+        contentView.setUpWith(datasource: tableViewManager, delegate: tableViewManager, loadStatusViewDelegate: self)
     }
     
     private func setUpObservers() {
@@ -68,6 +70,10 @@ class UserDetailsVC: UIViewController {
         Task(priority: .userInitiated) {
             await viewModel.loadUserDetails()
         }
+    }
+    
+    private func showRepositories() {
+        
     }
 }
 
