@@ -10,6 +10,7 @@ import Foundation
 struct ApiClientBuilder: Client {
     fileprivate(set) var baseUrl: String
     fileprivate(set) var urlSession: URLSession = URLSession.shared
+    fileprivate(set) var jsonDecoder: JSONDecoder = JSONDecoder()
     fileprivate(set) var headers: ApiRequestHeaders = [:]
     fileprivate(set) var queries: ApiRequestQueries = [:]
     fileprivate(set) var errorBodyInterceptor: ErrorBodyInterceptor
@@ -33,6 +34,13 @@ struct ApiClientBuilder: Client {
         return newSelf
     }
 
+    func withDecoder(_ clousure: (JSONDecoder)-> JSONDecoder) -> Self {
+        var newSelf = self
+        newSelf.jsonDecoder = clousure(self.jsonDecoder)
+        return newSelf
+    }
+
+    
     func addHeaders(_ headers: ApiRequestHeaders) -> Self {
         var newSelf = self
         newSelf.headers.merge(headers) { defaultValue, newValue in
@@ -64,6 +72,7 @@ struct ApiClientBuilder: Client {
     func build()-> ApiClient {
         return ApiClient(baseUrl: baseUrl,
                          urlSession: urlSession,
+                         jsonDecoder: jsonDecoder,
                          headers: headers,
                          queries: queries,
                          errorBodyInterceptor: errorBodyInterceptor
