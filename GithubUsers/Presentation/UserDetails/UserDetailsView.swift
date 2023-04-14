@@ -13,9 +13,10 @@ class UserDetailsView: UIView, WithViewCode {
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 200
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: String(describing: UITableViewCell.self))
+        tableView.register(ProfileHeaderTableViewCell.self, forCellReuseIdentifier: String(describing: ProfileHeaderTableViewCell.self))
+
         return tableView
     }()
     

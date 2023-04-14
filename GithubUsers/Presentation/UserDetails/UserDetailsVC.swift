@@ -11,6 +11,12 @@ import Combine
 class UserDetailsVC: UIViewController {
     private let viewModel: any UserDetailsViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
+    
+    private lazy var tableViewManager: UserDetailsVCTableViewManager = {
+        UserDetailsVCTableViewManager { [weak self] in
+            self?.viewModel
+        }
+    }()
 
     init(viewModel: any UserDetailsViewModelProtocol) {
         self.viewModel = viewModel
@@ -38,21 +44,21 @@ class UserDetailsVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        loadUser()
     }
     
     private func setUpUI() {
         title = viewModel.userLogin
-        contentView.setUpWith(datasource: self, delegate: self, loadStatusViewDelegate: self)
+        contentView.setUpWith(datasource: tableViewManager, delegate: nil, loadStatusViewDelegate: self)
     }
     
     private func setUpObservers() {
-        viewModel.user.receive(on: RunLoop.main)
+        viewModel.userPublisher.receive(on: RunLoop.main)
             .sink { [weak self] (_) in
                 self?.contentView.reloadData()
             }.store(in: &cancellables)
         
-        viewModel.executionStatus.receive(on: RunLoop.main)
+        viewModel.executionStatusPublisher.receive(on: RunLoop.main)
             .sink { [weak self] (status) in
                 self?.contentView.updateForStatus(executionStatus: status)
             }.store(in: &cancellables)
@@ -64,32 +70,6 @@ class UserDetailsVC: UIViewController {
         }
     }
 }
-
-//MARK: - UITableViewDataSource
-
-extension UserDetailsVC: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: UITableViewCell.self), for: indexPath)
-        
-        var content = UIListContentConfiguration.valueCell()
-        content.text = "Login"
-        content.secondaryText = viewModel.userLogin
-        cell.contentConfiguration = content
-
-        return cell
-    }
-}
-
-extension UserDetailsVC: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-}
-
 
 //MARK: - LoadStatusViewDelegate
 

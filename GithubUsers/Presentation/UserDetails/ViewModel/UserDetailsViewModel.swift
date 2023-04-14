@@ -8,20 +8,30 @@
 import Foundation
 
 class UserDetailsViewModel: UserDetailsViewModelProtocol {
-    @Published private var _user: User? = nil
-    @Published private var _executionStatus: ExecutionStatus = .none
+    
+    @Published private(set) var user: User? = nil
+    @Published private(set) var executionStatus: ExecutionStatus = .none
     
     private(set) var userLogin: String
-    var user: Published<User?>.Publisher {$_user}
-    var executionStatus: Published<ExecutionStatus>.Publisher {$_executionStatus}
     
+    var userPublisher: Published<User?>.Publisher {$user}
+    var executionStatusPublisher: Published<ExecutionStatus>.Publisher {$executionStatus}
+        
+    private let userDetailsUseCase: UserDetailsUseCaseProtocol
     
-    init(userLogin: String) {
+    init(userLogin: String, userDetailsUseCase: UserDetailsUseCaseProtocol) {
         self.userLogin = userLogin
+        self.userDetailsUseCase = userDetailsUseCase
     }
     
     func loadUserDetails() async {
-        
+        executionStatus = .inProgress
+        do {
+            user = try await userDetailsUseCase.loadUserDetails(login: userLogin)
+            executionStatus = user != nil ? .success : .noData
+        } catch {
+            executionStatus = .failed(error: error)
+        }
     }
     
 }
