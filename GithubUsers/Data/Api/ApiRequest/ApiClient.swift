@@ -10,20 +10,23 @@ import Foundation
 struct ApiClient: Client {
     fileprivate(set) var baseUrl: String
     fileprivate(set) var urlSession: URLSession
+    fileprivate(set) var jsonDecoder: JSONDecoder
     fileprivate(set) var headers: ApiRequestHeaders
     fileprivate(set) var queries: ApiRequestQueries
     fileprivate(set) var errorBodyInterceptor: ErrorBodyInterceptor
     
     init(baseUrl: String,
-                     urlSession: URLSession,
-                     headers: ApiRequestHeaders,
-                     queries: ApiRequestQueries,
-                     errorBodyInterceptor: @escaping ErrorBodyInterceptor
+         urlSession: URLSession,
+         jsonDecoder: JSONDecoder,
+         headers: ApiRequestHeaders,
+         queries: ApiRequestQueries,
+         errorBodyInterceptor: @escaping ErrorBodyInterceptor
     ) {
         self.baseUrl = baseUrl
         self.urlSession = urlSession
         self.headers = headers
         self.queries = queries
+        self.jsonDecoder = jsonDecoder
         self.errorBodyInterceptor = errorBodyInterceptor
     }
 }
@@ -34,6 +37,7 @@ protocol Client {
     var headers: ApiRequestHeaders {get}
     var queries: ApiRequestQueries {get}
     var errorBodyInterceptor: ErrorBodyInterceptor {get}
+    var jsonDecoder: JSONDecoder {get}
 }
 
 typealias ErrorBodyInterceptor = (Data?, HTTPURLResponse?)->Any?

@@ -73,7 +73,8 @@ class UserDetailsVC: UIViewController {
     }
     
     private func showRepositories() {
-        
+        let vc = ListUserReposVCFactory.make(userLogin: viewModel.userLogin)
+        show(vc, sender: self)
     }
 }
 

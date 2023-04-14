@@ -9,9 +9,13 @@ import Foundation
 
 class GithubApiClient {
     class func instance()-> ApiClient {
-        var builder = ApiClientBuilder(baseUrl: "https://api.github.com/")
+        let builder = ApiClientBuilder(baseUrl: "https://api.github.com/")
             .addErrorBodyInterceptor { data, response in
                 return data
+            }
+            .withDecoder { decoder in
+                decoder.dateDecodingStrategy = .iso8601
+                return decoder
             }
         return builder.build()
     }

@@ -13,7 +13,7 @@ extension ApiClient {
         let (data, response) = try await urlSession.data(for: urlRequest)
 
         try validateURLResponse(body: data, response: response as? HTTPURLResponse)
-        let responseBody: Content? = try JSONDecoder().decode(Content.self, from: data)
+        let responseBody: Content? = try jsonDecoder.decode(Content.self, from: data)
 
         return responseBody
     }
