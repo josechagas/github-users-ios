@@ -10,7 +10,7 @@ import Foundation
 struct User {
     var id: Int
     var login: String
-    var name: String
+    var name: String?
     var company: String?
     var email: String?
     var bio: String?
