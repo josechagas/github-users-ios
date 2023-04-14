@@ -26,6 +26,7 @@ class ProfileHeaderTableViewCell: UITableViewCell {
     }
         
     private func setUp() {
+        selectionStyle = .none
         addSubviews()
         addConstraints()
     }
