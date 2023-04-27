@@ -17,7 +17,7 @@ struct ReposRepository: ReposRepositoryProtocol {
     
     func loadReposOfUser(userLogin: String) async throws -> [GithubRepository] {
         let result = try await reposService.loadReposOfUser(userLogin: userLogin)
-        return result?.map({ response in
+        return result.map({ response in
             let owner = SmallUserInfo(
                 id: response.owner.id,
                 login: response.owner.login,
@@ -37,6 +37,6 @@ struct ReposRepository: ReposRepositoryProtocol {
                 createdAt: response.createdAt,
                 owner: owner
             )
-        }) ?? []
+        })
     }
 }

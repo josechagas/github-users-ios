@@ -8,5 +8,5 @@
 import Foundation
 
 protocol ReposApiServiceProtocol {
-    func loadReposOfUser(userLogin: String) async throws -> [LoadUserReposResponse]?
+    func loadReposOfUser(userLogin: String) async throws -> [LoadUserReposResponse]
 }

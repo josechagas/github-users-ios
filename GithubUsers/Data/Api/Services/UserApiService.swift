@@ -8,7 +8,7 @@
 import Foundation
 
 struct UserApiService: UserApiServiceProtocol {
-    func loadUser(login: String) async throws -> LoadUserResponse? {
+    func loadUser(login: String) async throws -> LoadUserResponse {
         let endpoint = UserDetailsEndpoint(login: login)
         return try await GithubApiClient.instance().execute(request: endpoint)
     }

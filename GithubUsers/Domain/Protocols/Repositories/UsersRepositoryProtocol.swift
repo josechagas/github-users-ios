@@ -9,4 +9,10 @@ import Foundation
 
 protocol UsersRepositoryProtocol {
     func loadUsers() async throws -> [SmallUserInfo]
+    func searchUsers(by: String,
+                     page: Int,
+                     perPage: Int,
+                     sortBy: SearchUsersSortBy?,
+                     orderBy: SearchUsersOrderBy
+    ) async throws -> SearchUsersResult
 }

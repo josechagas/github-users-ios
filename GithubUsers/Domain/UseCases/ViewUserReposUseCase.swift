@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct ViewUserReposUseCase: ViewUserReposUseCaseProtocol {
+class ViewUserReposUseCase: ViewUserReposUseCaseProtocol {
     
     private let reposRepository: ReposRepositoryProtocol
     

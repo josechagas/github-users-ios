@@ -8,12 +8,12 @@
 import Foundation
 
 extension ApiClient {
-    func execute<Content: Codable>(request: ApiRequest) async throws -> Content? {
+    func execute<Content: Codable>(request: ApiRequest) async throws -> Content {
         let urlRequest = try makeURLRequest(request)
         let (data, response) = try await urlSession.data(for: urlRequest)
 
         try validateURLResponse(body: data, response: response as? HTTPURLResponse)
-        let responseBody: Content? = try jsonDecoder.decode(Content.self, from: data)
+        let responseBody: Content = try jsonDecoder.decode(Content.self, from: data)
 
         return responseBody
     }
@@ -32,7 +32,7 @@ extension ApiClient {
         
         guard let baseURL = URL(string: baseUrl),
               let encodedUrl = endpoint.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed.union(.urlQueryAllowed)),
-              var url = URL(string: encodedUrl,relativeTo: baseURL),
+              let url = URL(string: encodedUrl,relativeTo: baseURL),
               var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             throw ApiRequestError.invalidUrlPath(path: endpoint)
         }

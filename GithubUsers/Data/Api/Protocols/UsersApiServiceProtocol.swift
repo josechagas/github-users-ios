@@ -9,4 +9,10 @@ import Foundation
 
 protocol UsersApiServiceProtocol {
     func loadUsers() async throws -> [LoadUsersResponse]
+    func searchUsers(search: String,
+                     page: Int,
+                     perPage: Int,
+                     sort: SortBy?,
+                     order: Order
+    ) async throws -> SearchUsersResponse
 }

@@ -16,9 +16,7 @@ struct UserRepository: UserRepositoryProtocol {
     }
     
     func loadUserDetails(login: String) async throws -> User? {
-        guard let response = try await userService.loadUser(login: login) else {
-            return nil
-        }
+        let response = try await userService.loadUser(login: login)
         
         return User(
             id: response.id,

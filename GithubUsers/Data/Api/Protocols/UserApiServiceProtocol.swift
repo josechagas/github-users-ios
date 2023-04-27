@@ -9,5 +9,5 @@ import Foundation
 
 
 protocol UserApiServiceProtocol {
-    func loadUser(login: String) async throws -> LoadUserResponse?
+    func loadUser(login: String) async throws -> LoadUserResponse
 }
