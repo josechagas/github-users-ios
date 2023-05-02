@@ -20,8 +20,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         
-        let navController = UINavigationController(rootViewController: ListUsersVCFactory.make())
-        window?.rootViewController = navController
+        let usersNavController = UINavigationController(rootViewController: ListUsersVCFactory.make())
+        usersNavController.tabBarItem = UITabBarItem(title: "Users", image: UIImage(systemName: "list.bullet"), tag: 0)
+        
+        let searchUsersNavController = UINavigationController(rootViewController: SearchUsersVCFactory.make())
+        searchUsersNavController.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+        
+        let tabController = UITabBarController()
+        tabController.viewControllers = [
+            usersNavController,
+            searchUsersNavController
+        ]
+        
+        window?.rootViewController = tabController
         window?.makeKeyAndVisible()
     }
 
