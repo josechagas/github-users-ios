@@ -8,7 +8,7 @@
 import Foundation
 
 class SearchUsersUseCase: SearchUsersUseCaseProtocol {
-    private let perPage: Int = 20
+    let perPage: Int = 20
     
     private var currentPage: Int = 1
     private var currentSearch: String? = nil

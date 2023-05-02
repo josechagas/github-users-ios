@@ -6,30 +6,232 @@
 //
 
 import XCTest
+@testable import GithubUsers
 
 final class SearchUsersUseCaseTests: XCTestCase {
+    func test_searchUsersFirstPage_success() async throws {
+        let search = "John Doe"
+        let sort:SearchUsersSortBy? = nil
+        let order = GithubUsers.SearchUsersOrderBy.ascending
+        
+        let repository = UsersRepositoryMockforSearchUsersUseCaseTests(
+            withResult: SearchUsersResult(totalCount: 300,
+                                          users: [
+                                            SmallUserInfo(id: 1, login: "someone one", htmlUrl: "https://github.com/someoneone"),
+                                            SmallUserInfo(id: 2, login: "someone two", htmlUrl: "https://github.com/someonetwo"),
+                                            SmallUserInfo(id: 3, login: "someone three", htmlUrl: "https://github.com/someonethree")
+                                          ]
+                                         )
+        )
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        let usecase = SearchUsersUseCase(usersRepository: repository)
+
+        XCTAssertNil(repository.lastSearchParams)
+        
+        let searchExpectation = XCTestExpectation(description: "Wait for search users result")
+        let result = try await usecase.searchUsers(search: search, sortBy: sort, orderBy: order)
+        
+        assertSearchParams(
+            expected: UsersRepositoryMockforSearchUsersUseCaseTests.LastSearchParams(
+                by: search, page: 1, perPage: usecase.perPage, sortBy: sort, orderBy: order
+            ),
+            result: repository.lastSearchParams
+        )
+        
+        assertSuccessResult(expected: repository.successResult?.users, result: result)
+        
+        searchExpectation.fulfill()
+        await fulfillment(of: [searchExpectation], timeout: 10)
+
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+    func test_searchUsersFirstPage_failed() async throws {
+        let search = "John Doe"
+        let sort:SearchUsersSortBy? = nil
+        let order = GithubUsers.SearchUsersOrderBy.ascending
+        
+        let repository = UsersRepositoryMockforSearchUsersUseCaseTests(withError: ApiRequestError.unknownError)
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
+        let usecase = SearchUsersUseCase(usersRepository: repository)
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+        XCTAssertNil(repository.lastSearchParams)
+        
+        let searchExpectation = XCTestExpectation(description: "Wait for search users result")
+
+        do {
+            let _ = try await usecase.searchUsers(search: search, sortBy: sort, orderBy: order)
+            XCTFail()
+        } catch where error is ApiRequestError {
+            assertSearchParams(
+                expected: UsersRepositoryMockforSearchUsersUseCaseTests.LastSearchParams(
+                    by: search, page: 1, perPage: usecase.perPage, sortBy: sort, orderBy: order
+                ),
+                result: repository.lastSearchParams
+            )
+        } catch {
+            XCTFail()
         }
+                
+        searchExpectation.fulfill()
+        await fulfillment(of: [searchExpectation], timeout: 10)
+
     }
 
+    
+    func test_searchUsersNextPages_success() async throws {
+        let search = "John Doe"
+        let sort:SearchUsersSortBy? = nil
+        let order = GithubUsers.SearchUsersOrderBy.ascending
+        
+        let repository = UsersRepositoryMockforSearchUsersUseCaseTests(
+            withResult: SearchUsersResult(totalCount: 300,
+                                          users: [
+                                            SmallUserInfo(id: 1, login: "someone one", htmlUrl: "https://github.com/someoneone"),
+                                            SmallUserInfo(id: 2, login: "someone two", htmlUrl: "https://github.com/someonetwo"),
+                                            SmallUserInfo(id: 3, login: "someone three", htmlUrl: "https://github.com/someonethree")
+                                          ]
+                                         )
+        )
+
+        let usecase = SearchUsersUseCase(usersRepository: repository)
+
+        XCTAssertNil(repository.lastSearchParams)
+        
+        let searchExpectation = XCTestExpectation(description: "Wait for search users result")
+        let _ = try await usecase.searchUsers(search: search, sortBy: sort, orderBy: order)
+        assertSearchParams(
+            expected: UsersRepositoryMockforSearchUsersUseCaseTests.LastSearchParams(
+                by: search, page: 1, perPage: usecase.perPage, sortBy: sort, orderBy: order
+            ),
+            result: repository.lastSearchParams
+        )
+        
+        let nextPageResult = try await usecase.loadMoreForLastSearch()
+        assertSearchParams(
+            expected: UsersRepositoryMockforSearchUsersUseCaseTests.LastSearchParams(
+                by: search, page: 2, perPage: usecase.perPage, sortBy: sort, orderBy: order
+            ),
+            result: repository.lastSearchParams
+        )
+        assertSuccessResult(expected: repository.successResult?.users, result: nextPageResult)
+
+        
+        searchExpectation.fulfill()
+        await fulfillment(of: [searchExpectation], timeout: 10)
+
+    }
+
+
+    func test_searchUsersNextPages_withoutMorePagesToLoad_success() async throws {
+        let search = "John Doe"
+        let sort:SearchUsersSortBy? = nil
+        let order = GithubUsers.SearchUsersOrderBy.ascending
+        
+        let repository = UsersRepositoryMockforSearchUsersUseCaseTests(
+            withResult: SearchUsersResult(totalCount: 3,
+                                          users: [
+                                            SmallUserInfo(id: 1, login: "someone one", htmlUrl: "https://github.com/someoneone"),
+                                            SmallUserInfo(id: 2, login: "someone two", htmlUrl: "https://github.com/someonetwo"),
+                                            SmallUserInfo(id: 3, login: "someone three", htmlUrl: "https://github.com/someonethree")
+                                          ]
+                                         )
+        )
+
+        let usecase = SearchUsersUseCase(usersRepository: repository)
+
+        XCTAssertNil(repository.lastSearchParams)
+        
+        let searchExpectation = XCTestExpectation(description: "Wait for search users result")
+        let _ = try await usecase.searchUsers(search: search, sortBy: sort, orderBy: order)
+        assertSearchParams(
+            expected: UsersRepositoryMockforSearchUsersUseCaseTests.LastSearchParams(
+                by: search, page: 1, perPage: usecase.perPage, sortBy: sort, orderBy: order
+            ),
+            result: repository.lastSearchParams
+        )
+        
+        let nextPageResult = try await usecase.loadMoreForLastSearch()
+        //Page keeps 1 because it does not make a repository call
+        assertSearchParams(
+            expected: UsersRepositoryMockforSearchUsersUseCaseTests.LastSearchParams(
+                by: search, page: 1, perPage: usecase.perPage, sortBy: sort, orderBy: order
+            ),
+            result: repository.lastSearchParams
+        )
+        assertSuccessResult(expected: [], result: nextPageResult)
+
+        
+        searchExpectation.fulfill()
+        await fulfillment(of: [searchExpectation], timeout: 10)
+
+    }
+    
+    func test_searchUsersNextPages_failed() async throws {
+        let search = "John Doe"
+        let sort:SearchUsersSortBy? = nil
+        let order = GithubUsers.SearchUsersOrderBy.ascending
+        
+        let repository = UsersRepositoryMockforSearchUsersUseCaseTests(
+            withResult: SearchUsersResult(totalCount: 300,
+                                          users: [
+                                            SmallUserInfo(id: 1, login: "someone one", htmlUrl: "https://github.com/someoneone"),
+                                            SmallUserInfo(id: 2, login: "someone two", htmlUrl: "https://github.com/someonetwo"),
+                                            SmallUserInfo(id: 3, login: "someone three", htmlUrl: "https://github.com/someonethree")
+                                          ]
+                                         )
+        )
+
+        let usecase = SearchUsersUseCase(usersRepository: repository)
+
+        XCTAssertNil(repository.lastSearchParams)
+        
+        let searchExpectation = XCTestExpectation(description: "Wait for search users result")
+        let _ = try await usecase.searchUsers(search: search, sortBy: sort, orderBy: order)
+        assertSearchParams(
+            expected: UsersRepositoryMockforSearchUsersUseCaseTests.LastSearchParams(
+                by: search, page: 1, perPage: usecase.perPage, sortBy: sort, orderBy: order
+            ),
+            result: repository.lastSearchParams
+        )
+        
+        do {
+            repository.updateForNextPage(nextPageResult: nil, error: ApiRequestError.requestFailed(statusCode: 400, errorBody: nil))
+            let _ = try await usecase.loadMoreForLastSearch()
+            XCTFail()
+        } catch where error is ApiRequestError {
+            assertSearchParams(
+                expected: UsersRepositoryMockforSearchUsersUseCaseTests.LastSearchParams(
+                    by: search, page: 2, perPage: usecase.perPage, sortBy: sort, orderBy: order
+                ),
+                result: repository.lastSearchParams
+            )
+        } catch {
+            XCTFail()
+        }
+        
+        searchExpectation.fulfill()
+        await fulfillment(of: [searchExpectation], timeout: 10)
+
+    }
+
+    
+    func assertSearchParams(expected: UsersRepositoryMockforSearchUsersUseCaseTests.LastSearchParams,
+                            result: UsersRepositoryMockforSearchUsersUseCaseTests.LastSearchParams?) {
+        XCTAssertEqual(expected.by, result?.by)
+        XCTAssertEqual(expected.orderBy, result?.orderBy)
+        XCTAssertEqual(expected.sortBy, result?.sortBy)
+        XCTAssertEqual(expected.perPage, result?.perPage)
+        XCTAssertEqual(expected.page, result?.page)
+    }
+    
+    func assertSuccessResult(expected: [SmallUserInfo]?, result: [SmallUserInfo]) {
+        XCTAssertEqual(expected?.count, result.count)
+        XCTAssertTrue(result.enumerated().allSatisfy({ item in
+            guard let user = expected?[item.offset] else {
+                return false
+            }
+            return item.element.id == user.id
+        }))
+
+    }
 }

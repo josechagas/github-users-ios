@@ -6,30 +6,87 @@
 //
 
 import XCTest
+@testable import GithubUsers
 
 final class SearchUsersEndpointTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    func test_initWith_validValues() throws {
+        let search = "John Doe"
+        let page = 2
+        let perPage = 95
+        let sortBy = SortBy.joined
+        let order = Order.asc
+        let endpoint = try SearchUsersEndpoint(by: search, page: page, perPage: perPage, sortBy: sortBy, order: order)
+        
+        XCTAssertEqual(endpoint.method, .get)
+        XCTAssertEqual(endpoint.endpoint, "search/users")
+        XCTAssertEqual(endpoint.headers.count, 0)
+        XCTAssertEqual(endpoint.queries["q"], search)
+        XCTAssertEqual(endpoint.queries["page"], String(describing: page))
+        XCTAssertEqual(endpoint.queries["per_page"], String(describing: perPage))
+        XCTAssertEqual(endpoint.queries["sort"], sortBy.rawValue)
+        XCTAssertEqual(endpoint.queries["order"], order.rawValue)
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func test_initWith_emptySearch_throwsSearchCanNotBeBlankException() throws {
+        let message = "It must throw SearchUsersEndpointError.searchCanNotBeBlank exception"
+        XCTAssertThrowsError(try SearchUsersEndpoint(by: ""),
+                             message) { error in
+            guard case SearchUsersEndpointError.searchCanNotBeBlank = error else {
+                XCTFail(message)
+                return
+            }
+            XCTAssertTrue(true, message)
+        }
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    func test_initWith_blankSearch_throwsSearchCanNotBeBlankException() throws {
+        let message = "It must throw SearchUsersEndpointError.searchCanNotBeBlank exception"
+        XCTAssertThrowsError(try SearchUsersEndpoint(by: ""),
+                             message) { error in
+            guard case SearchUsersEndpointError.searchCanNotBeBlank = error else {
+                XCTFail(message)
+                return
+            }
+            XCTAssertTrue(true, message)
+        }
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func test_initWith_pageEqualZero_throwsPageLessThanOneException() throws {
+        let message = "It must throw SearchUsersEndpointError.pageLessThanOne exception"
+        XCTAssertThrowsError(try SearchUsersEndpoint(by: "John Doe", page: 0),
+                             message) { error in
+            guard case SearchUsersEndpointError.pageLessThanOne = error else {
+                XCTFail(message)
+                return
+            }
+            XCTAssertTrue(true, message)
         }
     }
 
+    func test_initWith_perPageEqualZero_throwsPerPageLessThanOneException() throws {
+        let message = "It must throw SearchUsersEndpointError.perPageLessThanOne exception"
+        XCTAssertThrowsError(try SearchUsersEndpoint(by: "John Doe", page: 1, perPage: 0),
+                             message) { error in
+            guard case SearchUsersEndpointError.perPageLessThanOne = error else {
+                XCTFail(message)
+                return
+            }
+            XCTAssertTrue(true, message)
+        }
+    }
+    
+    func test_initWith_perPageBiggerThanMax_throwsPerPageBiggerThanMaxException() throws {
+        let message = "It must throw SearchUsersEndpointError.perPageBiggerThanMax exception"
+        XCTAssertThrowsError(try SearchUsersEndpoint(by: "John Doe", page: 1, perPage: SearchUsersEndpoint.perPageMaxValue + 1),
+                             message) { error in
+            guard case SearchUsersEndpointError.perPageBiggerThanMax = error else {
+                XCTFail(message)
+                return
+            }
+            XCTAssertTrue(true, message)
+        }
+    }
+    
+    
 }

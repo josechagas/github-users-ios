@@ -33,7 +33,7 @@ struct SearchUsersEndpoint: ApiRequest {
         }
         
         guard perPage <= SearchUsersEndpoint.perPageMaxValue else {
-            throw SearchUsersEndpointError.perPageBiggerThanMax(maxValue: SearchUsersEndpoint.perPageMaxValue)
+            throw SearchUsersEndpointError.perPageBiggerThanMax
         }
         
         queries = [
@@ -49,7 +49,7 @@ struct SearchUsersEndpoint: ApiRequest {
 enum SearchUsersEndpointError: Error {
     case pageLessThanOne
     case perPageLessThanOne
-    case perPageBiggerThanMax(maxValue: Int)
+    case perPageBiggerThanMax
     case searchCanNotBeBlank
 }
 
