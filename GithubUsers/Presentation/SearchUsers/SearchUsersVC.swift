@@ -46,6 +46,7 @@ class SearchUsersVC: UIViewController {
     private func setUpUI() {
         title = "Search"
         contentView.setUpWith(datasource: searchUsersTVM,
+                              prefetchDataSource: searchUsersTVM,
                               delegate: searchUsersTVM,
                               loadStatusViewDelegate: self,
                               searchBarDelegate: self

@@ -12,10 +12,14 @@ class SearchUsersViewModel: SearchUsersViewModelProtocol {
     @Published private(set) var users: [SmallUserInfo]? = nil
     
     @Published private(set) var executionStatus: ExecutionStatus = .none
+    @Published private(set) var paginationExecutionStatus: ExecutionStatus = .none
+
     
     var userPublisher: Published<[SmallUserInfo]?>.Publisher {$users}
-    var executionStatusPublisher: Published<ExecutionStatus>.Publisher {$executionStatus}
     
+    var executionStatusPublisher: Published<ExecutionStatus>.Publisher {$executionStatus}
+    var paginationExecutionStatusPublisher: Published<ExecutionStatus>.Publisher {$paginationExecutionStatus}
+
     private let searchUsersUseCase: SearchUsersUseCaseProtocol
     
     init(usecase: SearchUsersUseCaseProtocol) {
@@ -33,14 +37,29 @@ class SearchUsersViewModel: SearchUsersViewModelProtocol {
         }
     }
     
-    func loadMoreForCurrentSearch() async {
-        executionStatus = .inProgress
+    func fetchMoreSearchResults(lastIndex: Int) async {
+        if itsTimeToLoadMoreItems(lastIndex: lastIndex) {
+            await loadMoreForCurrentSearch()
+        }
+    }
+    
+    private func itsTimeToLoadMoreItems(lastIndex: Int)-> Bool {
+        let itemsCount = numberOfItems()
+        return itemsCount > 3 && lastIndex >= itemsCount - 3
+    }
+    
+    private func loadMoreForCurrentSearch() async {
+        if case .inProgress = paginationExecutionStatus {
+            return
+        }
+        
+        paginationExecutionStatus = .inProgress
         do {
             let result = try await searchUsersUseCase.loadMoreForLastSearch()
             users?.append(contentsOf: result)
-            executionStatus = .success
+            paginationExecutionStatus = .success
         } catch {
-            executionStatus = .failed(error: error)
+            paginationExecutionStatus = .failed(error: error)
         }
     }
     

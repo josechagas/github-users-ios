@@ -11,12 +11,14 @@ import Foundation
 protocol SearchUsersViewModelProtocol {
     var users: [SmallUserInfo]? {get}
     var executionStatus: ExecutionStatus {get}
-    
+    var paginationExecutionStatus: ExecutionStatus {get}
+
     var userPublisher: Published<[SmallUserInfo]?>.Publisher {get}
     var executionStatusPublisher: Published<ExecutionStatus>.Publisher {get}
-    
+    var paginationExecutionStatusPublisher: Published<ExecutionStatus>.Publisher {get}
+
     func searchUsersBy(search: String) async
-    func loadMoreForCurrentSearch() async
+    func fetchMoreSearchResults(lastIndex: Int) async
     
     func numberOfItems() -> Int
     func itemAtIndex(index: Int) -> SmallUserInfo?

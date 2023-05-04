@@ -105,11 +105,13 @@ class SearchUsersView: UIView, WithViewCode {
     }
  
     func setUpWith(datasource: UITableViewDataSource?,
+                   prefetchDataSource: UITableViewDataSourcePrefetching?,
                    delegate: UITableViewDelegate?,
                    loadStatusViewDelegate: LoadResultStatusViewDelegate?,
                    searchBarDelegate: UISearchBarDelegate
     ) {
         searchResultsTableView.dataSource = datasource
+        searchResultsTableView.prefetchDataSource = prefetchDataSource
         searchResultsTableView.delegate = delegate
         loadStatusView.delegate = loadStatusViewDelegate
         searchBar.delegate = searchBarDelegate

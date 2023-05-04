@@ -12,7 +12,7 @@ class SearchUsersTableViewManager: NSObject {
     let viewModel: ()-> SearchUsersViewModelProtocol?
     let onItemSelected: (SmallUserInfo)-> Void
     
-    init(viewModel:@escaping ()-> SearchUsersViewModelProtocol?,
+    init(viewModel: @escaping ()-> SearchUsersViewModelProtocol?,
          onItemSelected: @escaping (SmallUserInfo)-> Void
     ) {
         self.viewModel = viewModel
@@ -40,6 +40,20 @@ extension SearchUsersTableViewManager: UITableViewDataSource {
     }
 }
 
+//MARK: - UITableViewDataSourcePrefetching
+
+extension SearchUsersTableViewManager: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        loadMoreItems(lastIndexToPrefetch: indexPaths.last?.row ?? 0)
+    }
+    
+    func loadMoreItems(lastIndexToPrefetch: Int) {
+        Task(priority: .userInitiated){
+            await viewModel()?.fetchMoreSearchResults(lastIndex: lastIndexToPrefetch)
+        }
+    }
+}
+
 //MARK: - UITableViewDelegate
 
 extension SearchUsersTableViewManager: UITableViewDelegate {
@@ -51,3 +65,4 @@ extension SearchUsersTableViewManager: UITableViewDelegate {
         onItemSelected(item)
     }
 }
+
