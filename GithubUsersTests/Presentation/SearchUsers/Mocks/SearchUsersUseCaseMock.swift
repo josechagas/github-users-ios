@@ -23,7 +23,7 @@ struct SearchUsersUseCaseMock: SearchUsersUseCaseProtocol {
     }
     
     func loadMoreForLastSearch() async throws -> [GithubUsers.SmallUserInfo] {
-        switch searchUsersResult {
+        switch loadMoreForLastSearchResult {
         case .success(let success):
             return success
         case .failure(let failure):
