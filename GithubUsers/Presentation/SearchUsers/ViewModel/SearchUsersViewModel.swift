@@ -45,7 +45,7 @@ class SearchUsersViewModel: SearchUsersViewModelProtocol {
     
     private func itsTimeToLoadMoreItems(lastIndex: Int)-> Bool {
         let itemsCount = numberOfItems()
-        return itemsCount > 3 && lastIndex >= itemsCount - 3
+        return itemsCount > 0 && lastIndex > 0 && lastIndex >= itemsCount - 3
     }
     
     private func loadMoreForCurrentSearch() async {
