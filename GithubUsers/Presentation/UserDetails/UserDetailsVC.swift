@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class UserDetailsVC: ViewController {
+class UserDetailsVC: UIViewController {
     private let viewModel: any UserDetailsViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
     
@@ -98,8 +98,8 @@ class UserDetailsVC: ViewController {
 //        }
 
         let vc = ListUserReposVCFactory.make(userLogin: viewModel.userLogin)
-        //show(vc, sender: self)
-        dismiss(animated: true)
+        show(vc, sender: self)
+        //dismiss(animated: true)
     }
 }
 

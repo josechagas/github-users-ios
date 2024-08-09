@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class ListUserReposVC: ViewController {
+class ListUserReposVC: UIViewController {
 
     private let viewModel: any ListUserReposViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
