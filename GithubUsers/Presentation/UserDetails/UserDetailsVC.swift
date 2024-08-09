@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class UserDetailsVC: UIViewController {
+class UserDetailsVC: ViewController {
     private let viewModel: any UserDetailsViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
     
@@ -23,6 +23,7 @@ class UserDetailsVC: UIViewController {
     init(viewModel: any UserDetailsViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .pageSheet
     }
     
     required init?(coder: NSCoder) {
@@ -49,6 +50,22 @@ class UserDetailsVC: UIViewController {
         loadUser()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        trackScreenView()
+    }
+    
+    override func viewDidDismissModal(viewWasOutOfWindow: Bool) {
+        super.viewDidDismissModal(viewWasOutOfWindow: viewWasOutOfWindow)
+        if !viewWasOutOfWindow {
+            trackScreenView()
+        }
+    }
+    
+    private func trackScreenView() {
+        print("mostrou detalhes do usuário")
+    }
+    
     private func setUpUI() {
         title = viewModel.userLogin
         contentView.setUpWith(datasource: tableViewManager, delegate: tableViewManager, loadStatusViewDelegate: self)
@@ -73,8 +90,16 @@ class UserDetailsVC: UIViewController {
     }
     
     private func showRepositories() {
+//        let presentingVC = presentingViewController
+//        dismiss(animated: true) { [weak self] in
+//            guard let self else { return }
+//            let vc = ListUserReposVCFactory.make(userLogin: viewModel.userLogin)
+//            presentingVC?.show(vc, sender: self)
+//        }
+
         let vc = ListUserReposVCFactory.make(userLogin: viewModel.userLogin)
-        show(vc, sender: self)
+        //show(vc, sender: self)
+        dismiss(animated: true)
     }
 }
 

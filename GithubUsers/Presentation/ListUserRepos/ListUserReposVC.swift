@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-class ListUserReposVC: UIViewController {
+class ListUserReposVC: ViewController {
 
     private let viewModel: any ListUserReposViewModelProtocol
     private var cancellables: Set<AnyCancellable> = []
@@ -39,6 +39,15 @@ class ListUserReposVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadUserRepos()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        trackScreenView()
+    }
+    
+    private func trackScreenView() {
+        print("mostrou repositorios do usuário")
     }
     
     private func setUpUI() {

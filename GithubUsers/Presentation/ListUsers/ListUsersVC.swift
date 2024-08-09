@@ -43,6 +43,22 @@ class ListUsersVC: UIViewController {
         loadUsers()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        trackScreenView()
+    }
+    
+    override func viewDidDismissModal(viewWasOutOfWindow: Bool) {
+        super.viewDidDismissModal(viewWasOutOfWindow: viewWasOutOfWindow)
+        if !viewWasOutOfWindow {
+            trackScreenView()
+        }
+    }
+    
+    private func trackScreenView() {
+        print("mostrou lista de usuarios")
+    }
+    
     private func setUpUI() {
         title = "Users"
         contentView.setUpWith(datasource: self, delegate: self, loadStatusViewDelegate: self)
@@ -91,7 +107,8 @@ extension ListUsersVC: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         if let user = viewModel.userAtIndex(indexPath.row) {
             let userDetailsVC = UserDetailsVCFactory.make(userLogin: user.login)
-            show(userDetailsVC, sender: self)
+            //show(userDetailsVC, sender: self)
+            showDetailViewController(userDetailsVC, sender: self)
         }
     }
 }
