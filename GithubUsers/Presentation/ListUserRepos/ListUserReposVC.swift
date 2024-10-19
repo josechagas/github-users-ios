@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import FirebaseAnalytics
 
 class ListUserReposVC: UIViewController {
 
@@ -46,8 +47,16 @@ class ListUserReposVC: UIViewController {
         trackScreenView()
     }
     
+    override func viewDidDismissModal(viewWasOutOfWindow: Bool) {
+        super.viewDidDismissModal(viewWasOutOfWindow: viewWasOutOfWindow)
+        if !viewWasOutOfWindow {
+            trackScreenView()
+        }
+    }
+    
     private func trackScreenView() {
-        print("mostrou repositorios do usuário")
+        Analytics.logEvent(AnalyticsEventScreenView,
+                           parameters: [AnalyticsParameterScreenName: "user-repositories"])
     }
     
     private func setUpUI() {

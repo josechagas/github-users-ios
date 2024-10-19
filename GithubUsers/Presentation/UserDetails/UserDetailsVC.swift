@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import FirebaseAnalytics
 
 class UserDetailsVC: UIViewController {
     private let viewModel: any UserDetailsViewModelProtocol
@@ -17,6 +18,8 @@ class UserDetailsVC: UIViewController {
             self?.viewModel
         } showRepositoriesAction: { [weak self] in
             self?.showRepositories()
+        } cancelAction: { [weak self] in
+            self?.dismiss(animated: true)
         }
     }()
 
@@ -63,7 +66,8 @@ class UserDetailsVC: UIViewController {
     }
     
     private func trackScreenView() {
-        print("mostrou detalhes do usuário")
+        Analytics.logEvent(AnalyticsEventScreenView,
+                           parameters: [AnalyticsParameterScreenName: "user-details"])
     }
     
     private func setUpUI() {
@@ -90,16 +94,8 @@ class UserDetailsVC: UIViewController {
     }
     
     private func showRepositories() {
-//        let presentingVC = presentingViewController
-//        dismiss(animated: true) { [weak self] in
-//            guard let self else { return }
-//            let vc = ListUserReposVCFactory.make(userLogin: viewModel.userLogin)
-//            presentingVC?.show(vc, sender: self)
-//        }
-
         let vc = ListUserReposVCFactory.make(userLogin: viewModel.userLogin)
         show(vc, sender: self)
-        //dismiss(animated: true)
     }
 }
 

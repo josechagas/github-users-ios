@@ -12,17 +12,20 @@ class UserDetailsVCTableViewManager: NSObject {
         
     private var viewModel: ()-> (any UserDetailsViewModelProtocol)?
     private var showRepositoriesAction: ()-> Void
+    private var cancelAction: ()-> Void
 
     private var numberOfSections: Int = 3
     private var showRepositoresCellIndexPath = IndexPath(row: 0, section: 2)
-    
+    private var cancelCellIndexPath = IndexPath(row: 1, section: 2)
+
     private var hasData: Bool {
         viewModel()?.user != nil
     }
     
-    init(viewModel: @escaping ()-> (any UserDetailsViewModelProtocol)?, showRepositoriesAction: @escaping ()-> Void) {
+    init(viewModel: @escaping ()-> (any UserDetailsViewModelProtocol)?, showRepositoriesAction: @escaping ()-> Void, cancelAction: @escaping ()-> Void) {
         self.viewModel = viewModel
         self.showRepositoriesAction = showRepositoriesAction
+        self.cancelAction = cancelAction
     }
 }
 
@@ -46,7 +49,7 @@ extension UserDetailsVCTableViewManager: UITableViewDataSource {
         } else if section == 1 {
             return 4
         } else if section == 2 {
-            return 1
+            return 2
         }
         
         return 0
@@ -66,6 +69,8 @@ extension UserDetailsVCTableViewManager: UITableViewDataSource {
             
         } else if indexPath == showRepositoresCellIndexPath {
             return dequeueButtonActionCell(tableView: tableView, indexPath: indexPath, actionTitle: "Repositories")
+        } else if indexPath == cancelCellIndexPath {
+            return dequeueButtonActionCell(tableView: tableView, indexPath: indexPath, actionTitle: "Cancel")
 
         }
         
@@ -137,6 +142,8 @@ extension UserDetailsVCTableViewManager: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath == showRepositoresCellIndexPath {
             showRepositoriesAction()
+        } else if indexPath == cancelCellIndexPath {
+            cancelAction()
         }
     }
 }

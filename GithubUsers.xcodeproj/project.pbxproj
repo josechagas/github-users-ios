@@ -92,6 +92,7 @@
 		03521FC829E98B49002D8BA3 /* UserDetailsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03521FC729E98B49002D8BA3 /* UserDetailsViewModelTests.swift */; };
 		03521FCB29E98C87002D8BA3 /* UserDetailsUseCaseSuccess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03521FCA29E98C87002D8BA3 /* UserDetailsUseCaseSuccess.swift */; };
 		03521FCD29E98D88002D8BA3 /* UserDetailsUseCaseFailed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03521FCC29E98D88002D8BA3 /* UserDetailsUseCaseFailed.swift */; };
+		03ADCE432CBC4D80006E3618 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 03ADCE422CBC4D80006E3618 /* GoogleService-Info.plist */; };
 		03AEB9D82A0417010049457F /* SearchUsersViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03AEB9D72A0417010049457F /* SearchUsersViewModelTests.swift */; };
 		03AEB9DB2A041A4D0049457F /* SearchUsersUseCaseMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03AEB9DA2A041A4D0049457F /* SearchUsersUseCaseMock.swift */; };
 		03C971FD2A01468100F9C964 /* UsersRepositoryMockForSearchUsersUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03C971FC2A01468100F9C964 /* UsersRepositoryMockForSearchUsersUseCaseTests.swift */; };
@@ -114,6 +115,7 @@
 		03DD3FCF29FAC6EA00BA99B6 /* SearchUsersUseCaseFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DD3FCE29FAC6EA00BA99B6 /* SearchUsersUseCaseFactory.swift */; };
 		03DD3FD829FAC77B00BA99B6 /* SearchUsersEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DD3FD729FAC77B00BA99B6 /* SearchUsersEndpointTests.swift */; };
 		03DD3FDA29FAC78B00BA99B6 /* SearchUsersUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DD3FD929FAC78B00BA99B6 /* SearchUsersUseCaseTests.swift */; };
+		03F5FDFF2C66A56200F3494B /* ModalAwareLifecycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03F5FDFE2C66A56200F3494B /* ModalAwareLifecycle.swift */; };
 		2755D67CD311E678DCC22199 /* Pods_GithubUsers_GithubUsersUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77E79734A390C5A5B70CBEEB /* Pods_GithubUsers_GithubUsersUITests.framework */; };
 		540B7239A90A38BA4852EF17 /* Pods_GithubUsersTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32718AD0707C7643CC3200F3 /* Pods_GithubUsersTests.framework */; };
 		981704AE0C945D5E0F2FDE20 /* Pods_GithubUsers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1905E5F8A6F08AB1433D74CE /* Pods_GithubUsers.framework */; };
@@ -226,6 +228,7 @@
 		03521FC729E98B49002D8BA3 /* UserDetailsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsViewModelTests.swift; sourceTree = "<group>"; };
 		03521FCA29E98C87002D8BA3 /* UserDetailsUseCaseSuccess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsUseCaseSuccess.swift; sourceTree = "<group>"; };
 		03521FCC29E98D88002D8BA3 /* UserDetailsUseCaseFailed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetailsUseCaseFailed.swift; sourceTree = "<group>"; };
+		03ADCE422CBC4D80006E3618 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		03AEB9D72A0417010049457F /* SearchUsersViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersViewModelTests.swift; sourceTree = "<group>"; };
 		03AEB9DA2A041A4D0049457F /* SearchUsersUseCaseMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersUseCaseMock.swift; sourceTree = "<group>"; };
 		03C971FC2A01468100F9C964 /* UsersRepositoryMockForSearchUsersUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersRepositoryMockForSearchUsersUseCaseTests.swift; sourceTree = "<group>"; };
@@ -248,6 +251,7 @@
 		03DD3FCE29FAC6EA00BA99B6 /* SearchUsersUseCaseFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersUseCaseFactory.swift; sourceTree = "<group>"; };
 		03DD3FD729FAC77B00BA99B6 /* SearchUsersEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersEndpointTests.swift; sourceTree = "<group>"; };
 		03DD3FD929FAC78B00BA99B6 /* SearchUsersUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersUseCaseTests.swift; sourceTree = "<group>"; };
+		03F5FDFE2C66A56200F3494B /* ModalAwareLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalAwareLifecycle.swift; sourceTree = "<group>"; };
 		1905E5F8A6F08AB1433D74CE /* Pods_GithubUsers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GithubUsers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		32718AD0707C7643CC3200F3 /* Pods_GithubUsersTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GithubUsersTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		35712DF9CBE3A467AD64EEC1 /* Pods-GithubUsersTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GithubUsersTests.debug.xcconfig"; path = "Target Support Files/Pods-GithubUsersTests/Pods-GithubUsersTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -538,9 +542,11 @@
 		03521F5229E74F75002D8BA3 /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				03ADCE422CBC4D80006E3618 /* GoogleService-Info.plist */,
 				03521EFC29E73B19002D8BA3 /* Assets.xcassets */,
 				03521EF329E73B18002D8BA3 /* AppDelegate.swift */,
 				03521EF529E73B18002D8BA3 /* SceneDelegate.swift */,
+				03F5FDFE2C66A56200F3494B /* ModalAwareLifecycle.swift */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -980,6 +986,7 @@
 			files = (
 				03521F0029E73B19002D8BA3 /* LaunchScreen.storyboard in Resources */,
 				03521EFD29E73B19002D8BA3 /* Assets.xcassets in Resources */,
+				03ADCE432CBC4D80006E3618 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1194,6 +1201,7 @@
 				03521F7929E8315A002D8BA3 /* ListUsersViewModel.swift in Sources */,
 				03521F6529E754A5002D8BA3 /* ListUsersEndpoint.swift in Sources */,
 				03521F5F29E7526A002D8BA3 /* ApiRequest.swift in Sources */,
+				03F5FDFF2C66A56200F3494B /* ModalAwareLifecycle.swift in Sources */,
 				03C9720C2A0186AE00F9C964 /* SearchUsersVCFactory.swift in Sources */,
 				0307A67729E9BBB80002ECCE /* LoadUserReposResponse.swift in Sources */,
 			);

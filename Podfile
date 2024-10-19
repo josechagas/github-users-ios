@@ -8,6 +8,9 @@ target 'GithubUsers' do
   # Pods for GithubUsers
   pod 'SDWebImage', '~> 5.0'
   
+  # Add the Firebase pod for Google Analytics
+  pod 'FirebaseAnalytics'
+  
   target 'GithubUsersTests' do
     inherit! :search_paths
     # Pods for testing

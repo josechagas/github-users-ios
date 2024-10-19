@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import FirebaseAnalytics
 
 class ListUsersVC: UIViewController {
 
@@ -56,7 +57,8 @@ class ListUsersVC: UIViewController {
     }
     
     private func trackScreenView() {
-        print("mostrou lista de usuarios")
+        Analytics.logEvent(AnalyticsEventScreenView,
+                           parameters: [AnalyticsParameterScreenName: "users"])
     }
     
     private func setUpUI() {

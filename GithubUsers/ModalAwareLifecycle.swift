@@ -1,5 +1,5 @@
 //
-//  ModalAwareLifeCycle.swift
+//  ModalAwareLifecycle.swift
 //  GithubUsers
 //
 //  Created by José Lucas Souza das Chagas on 09/08/24.
@@ -8,11 +8,11 @@
 import UIKit
 
 @objc
-public protocol ModalAwareLifeCycle: AnyObject {
+public protocol ModalAwareLifecycle: AnyObject {
     func viewDidDismissModal(viewWasOutOfWindow: Bool)
 }
 
-fileprivate extension ModalAwareLifeCycle where Self: UIViewController {
+fileprivate extension ModalAwareLifecycle where Self: UIViewController {
     typealias DismissAction = (_ animated: Bool, _ completion: (() -> Void)?) -> Void
     typealias DismissCompletionCallback = () -> Void
 
@@ -33,16 +33,6 @@ fileprivate extension ModalAwareLifeCycle where Self: UIViewController {
     }
 }
 
-extension UIViewController {
-    var hasBeenAddedToWindow: Bool {
-        viewIfLoaded?.window != nil
-    }
-}
-
-extension UIViewController: ModalAwareLifeCycle {
-    public func viewDidDismissModal(viewWasOutOfWindow: Bool) {}
-}
-
 extension UINavigationController {
     public override func viewDidDismissModal(viewWasOutOfWindow: Bool) {
         topViewController?.viewDidDismissModal(viewWasOutOfWindow: viewWasOutOfWindow)
@@ -60,7 +50,16 @@ extension UISplitViewController {
         let primaryVC = viewController(for: .primary)
         let hasBeenAddedToWindow = primaryVC?.hasBeenAddedToWindow ?? false
         primaryVC?.viewDidDismissModal(viewWasOutOfWindow: !hasBeenAddedToWindow)
-        fatalError("Validation needed")
+    }
+}
+
+extension UIViewController: ModalAwareLifecycle {
+    public func viewDidDismissModal(viewWasOutOfWindow: Bool) {}
+}
+
+fileprivate extension UIViewController {
+    var hasBeenAddedToWindow: Bool {
+        viewIfLoaded?.window != nil
     }
 }
 
@@ -81,8 +80,6 @@ extension UIViewController {
         
         method_setImplementation(uikitMethod, newImplementation);
         method_setImplementation(oldMethod, uikitImplementation);
-        
-        //method_exchangeImplementations(originalMethod, swizzledMethod)
     }
     
     @objc

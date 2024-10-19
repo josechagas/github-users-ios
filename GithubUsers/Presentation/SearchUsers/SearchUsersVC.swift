@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import FirebaseAnalytics
 
 class SearchUsersVC: UIViewController {
     private let viewModel: SearchUsersViewModelProtocol
@@ -43,6 +44,24 @@ class SearchUsersVC: UIViewController {
         setUpUI()
         setUpObservers()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        trackScreenView()
+    }
+    
+    override func viewDidDismissModal(viewWasOutOfWindow: Bool) {
+        super.viewDidDismissModal(viewWasOutOfWindow: viewWasOutOfWindow)
+        if !viewWasOutOfWindow {
+            trackScreenView()
+        }
+    }
+    
+    private func trackScreenView() {
+        Analytics.logEvent(AnalyticsEventScreenView,
+                           parameters: [AnalyticsParameterScreenName: "search-users"])
+    }
+    
     
     private func setUpUI() {
         title = "Search"

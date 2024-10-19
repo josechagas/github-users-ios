@@ -18,6 +18,8 @@ Pods/
 # Icon must end with two \r
 Icon
 
+#Firebase / Google
+GoogleService-Info.plist
 
 # Thumbnails
 ._*
